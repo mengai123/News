@@ -3,7 +3,7 @@
 
 var React = require('react-native');
 
-var ImagesListView = require('./ImagesListView');
+var ImageCategoryList = require('./ImageCategoryList');
 
 var {
 	StyleSheet,
@@ -27,7 +27,7 @@ var TabBar = React.createClass({
 	},
 
 	render: function() {
-        
+
         return (
             <TabBarIOS selectedTab={this.state.selectedTab}>
 
@@ -47,9 +47,8 @@ var TabBar = React.createClass({
                         style = {[{flex : 1, marginTop : 0}]}
                         initialRoute = {{
                                 title: '分类',
-                                component: ImagesListView,
+                                component: ImageCategoryList,
                             }} />
-                    
                 </TabBarItemIOS>
 
                 <TabBarItemIOS

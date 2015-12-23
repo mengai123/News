@@ -2,6 +2,7 @@
 'use strict';
 
 var React = require('react-native');
+var ShowImageDetail = require('./ShowImageDetail');
 
 var {
 	StyleSheet,
@@ -13,7 +14,7 @@ var {
 	TouchableOpacity,
 } = React;
 
-var Image_Category_URL = 'http://apis.baidu.com/tngou/gallery/classify?apikey=4f1dbfd91e07e653f07f974543895bb6'
+var Image_List_URL = 'http://apis.baidu.com/tngou/gallery/list'
 
 var ImagesListView = React.createClass({
 
@@ -23,11 +24,11 @@ var ImagesListView = React.createClass({
 				rowHasChanged: (row1, row2) => row1 !== row2
 			}),
 			loaded: false,
+			totalCount: 0,
 		};
 	},
 
 	render: function () {
-
 		if (!this.state.loaded) {
 			return (
 				<View style = {styles.container}>
@@ -39,15 +40,32 @@ var ImagesListView = React.createClass({
 				<ListView
 				dataSource = {this.state.dataSource}
 				renderRow = {this.renderImageRow}
-				style = {styles.listView}/>
+				style = {styles.listViewContainer}/>
 			);
 		}
 	},
 
 	renderImageRow: function (image) {
 		return (
-			<TouchableOpacity style = {styles.container}>
-				<Text>{image.title}</Text>
+			<TouchableOpacity
+				onPress = {() => {this.didSelectImage(image)}}
+				style = {styles.listRowcontainer}>
+
+				<Image
+					style = {styles.picContainer}
+					source = {{uri: 'http://tnfs.tngou.net/image' + image.img}}
+					defaultSource = {require('image!placeholder')} />
+				<View style = {styles.contetContainer}>
+					<Text
+						numberOfLines = {2}
+						style = {styles.titleContainer}>
+						{image.title}
+					</Text>
+					<Text
+						style = {styles.desContainer}>
+						{'热度:' + image.count}
+					</Text>
+				</View>
 			</TouchableOpacity>
 		);
 	},
@@ -56,20 +74,31 @@ var ImagesListView = React.createClass({
 		this.fetchData();
 	},
 
-	fetchData: function () {
+	didSelectImage: function (image) {
+		this.props.navigator.push({
+			title: image.title,
+			passProps: {image : image},
+			component: ShowImageDetail,
+		});
+	},
 
+	fetchData: function () {
 		var obj = {
 			method: "GET",
 			headers: {
 			'apikey' : '4f1dbfd91e07e653f07f974543895bb6',
+			'id' : this.props.imageCategory.id,
+			'page' : '1',
+			'rows' : '20',
 			},
 		};
 
-		fetch(Image_Category_URL,obj)
+		fetch(Image_List_URL,obj)
 			.then((response) => response.json())
 			.then((responseData) => {
 				this.setState({
-					dataSource: this.state.dataSource.cloneWithRows(responseData),
+					totalCount: responseData.total,
+					dataSource: this.state.dataSource.cloneWithRows(responseData.tngou),
 					loaded: true,
 				});
 			})
@@ -78,45 +107,42 @@ var ImagesListView = React.createClass({
 });
 
 var styles = StyleSheet.create({
-    pageContainer: {
-        marginLeft : 10,
-        marginRight : 10,
-    },
-    container: {
+		listViewContainer: {
+			marginTop: 64,
+			marginBottom: 49,
+			backgroundColor: '#ffffff',
+		},
+    listRowcontainer: {
         flex: 1,
         flexDirection : 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height : 44,
-        backgroundColor: '#fffff1',
-    },
-    rightContainer: {
-        flex: 1,
-    },
-    newsItemContainer: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#ebebeb',
-    },
-    listView: {
-    	marginTop: 64,
+        justifyContent: 'flex-start',
+				paddingLeft: 15,
+				marginRight: 15,
+        height : 100,
         backgroundColor: '#ffffff',
+				borderBottomColor: '#eaeaea',
+		    borderBottomWidth: 0.5,
     },
-    newsPic : {
-        width : 90,
-        height : 60,
-        margin: 10,
-        marginLeft: 0,
-    },
-    newsTitle : {
-        color : '#4f4f4f',
-        fontSize : 16,
-        textAlign : 'left',
-    },
-    newsSummary : {
-        color : '#bababa',
-        fontSize : 14,
-        textAlign : 'left',
-    },
+		contetContainer: {
+			flex: 1,
+			marginLeft: 15,
+		},
+		titleContainer: {
+			marginTop: 10,
+			fontSize: 18,
+		},
+		desContainer: {
+			fontSize: 15,
+			position: 'absolute',
+			bottom: 10,
+			right:0,
+			color:'#999999'
+		},
+		picContainer: {
+			height: 80,
+			width: 60,
+			marginTop: 10,
+		},
 });
 
 module.exports = ImagesListView;
