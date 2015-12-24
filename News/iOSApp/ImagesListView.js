@@ -31,8 +31,8 @@ var ImagesListView = React.createClass({
 	render: function () {
 		if (!this.state.loaded) {
 			return (
-				<View style = {styles.container}>
-					<Text>Loading ...</Text>
+				<View style = {styles.loadingContainer}>
+					<Text>{'努力加载列表中 ...'}</Text>
 				</View>
 			);
 		} else {
@@ -87,13 +87,11 @@ var ImagesListView = React.createClass({
 			method: "GET",
 			headers: {
 			'apikey' : '4f1dbfd91e07e653f07f974543895bb6',
-			'id' : this.props.imageCategory.id,
-			'page' : '1',
-			'rows' : '20',
 			},
 		};
 
-		fetch(Image_List_URL,obj)
+		var url = Image_List_URL + '?' + 'id=' + this.props.imageCategory.id + '&' + 'page=1&rows=30';
+		fetch(url,obj)
 			.then((response) => response.json())
 			.then((responseData) => {
 				this.setState({
@@ -107,6 +105,12 @@ var ImagesListView = React.createClass({
 });
 
 var styles = StyleSheet.create({
+		loadingContainer: {
+	      flex: 1,
+	      justifyContent: 'center',
+	      alignItems: 'center',
+	      backgroundColor: '#ffffff',
+	  },
 		listViewContainer: {
 			marginTop: 64,
 			marginBottom: 49,
