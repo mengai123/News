@@ -133,10 +133,10 @@ var styles = StyleSheet.create({
 		},
 		titleContainer: {
 			marginTop: 10,
-			fontSize: 18,
+			fontSize: 16,
 		},
 		desContainer: {
-			fontSize: 15,
+			fontSize: 14,
 			position: 'absolute',
 			bottom: 10,
 			right:0,

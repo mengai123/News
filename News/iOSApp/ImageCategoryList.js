@@ -35,9 +35,9 @@ var ImageCategoryList = React.createClass({
       } else {
         return(
           <ListView
-          dataSource = {this.state.dataSource}
-          renderRow = {this._renderRow}
-          style = {styles.listViewContainer}
+            dataSource = {this.state.dataSource}
+            renderRow = {this._renderRow}
+            style = {styles.listViewContainer}
           />
         );
       }

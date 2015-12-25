@@ -1,6 +1,7 @@
 
 'use strict';
 var React = require('react-native');
+var Lodash = require('lodash');
 
 var {
   StyleSheet,
@@ -9,24 +10,25 @@ var {
   Navigator,
   Image,
   TouchableOpacity,
-  ListView,
+  ScrollView,
+  Dimensions,
 } = React;
 
+var {width, height} = Dimensions.get('window');
 var Image_Detail_URL = 'http://apis.baidu.com/tngou/gallery/show';
 
 var ShowImageDetail = React.createClass({
 
   getInitialState: function () {
     return {
-      images: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2
-      }),
+      images: null,
       loaded: false,
+      screenWidth: width,
+      screenHeight: height,
     };
   },
 
   render: function () {
-
     if (!this.state.loaded) {
       return (
         <View style = {styles.loadingContainer}>
@@ -35,10 +37,12 @@ var ShowImageDetail = React.createClass({
       );
     } else  {
       return (
-        <ListView
-          dataSource = {this.state.images}
-          renderRow = {this.renderImageRow}
-          style = {styles.listViewContainer} />
+        <ScrollView
+          contentContainerStyle = {styles.scrollViewContent}
+          style = {styles.scrollViewContainer}
+          >
+            {this.renderImagesRow(this.state.images)}
+        </ScrollView>
       );
     }
   },
@@ -47,13 +51,24 @@ var ShowImageDetail = React.createClass({
     this.fetchData();
   },
 
-  renderImageRow: function (img) {
-    return (
-      <TouchableOpacity style = {styles.listRowcontainer}>
-          <Image style = {styles.imageContainer}
-            source = {{uri: 'http://tnfs.tngou.net/image' + img.src}} />
-      </TouchableOpacity>
-    );
+  renderImagesRow: function (images) {
+    return images.map((img) => {
+        return(
+          <Image
+            style = {[this.calculateImageSize(), styles.img]}
+            source = {{uri: 'http://tnfs.tngou.net/image' + img.src}}
+            defaultSource = {require('image!placeholder')} />
+        );
+      });
+  },
+
+  calculateImageSize: function () {
+    var IMAGE_ROW_COUNT = 4;
+    var size = this.state.screenWidth / IMAGE_ROW_COUNT;
+    return {
+      width: size,
+      height: size,
+    };
   },
 
   fetchData: function () {
@@ -69,7 +84,7 @@ var ShowImageDetail = React.createClass({
 			.then((response) => response.json())
 			.then((responseData) => {
 				this.setState({
-          images: this.state.images.cloneWithRows(responseData.list),
+          images: responseData.list,
           loaded: true,
 				});
 			})
@@ -84,25 +99,20 @@ var styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: '#ffffff',
   },
-  listViewContainer: {
-    flex: 1,
+
+  scrollViewContainer: {
+    flex : 1,
     marginTop: 64,
     marginBottom: 49,
   },
-  listRowcontainer: {
-    flex: 1,
-    flexDirection : 'row',
-    justifyContent: 'flex-start',
-    paddingLeft: 15,
-    marginRight: 15,
-    height : 100,
-    backgroundColor: '#ffffff',
-    borderBottomColor: '#eaeaea',
-    borderBottomWidth: 0.5,
+
+  scrollViewContent: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
-  imageContainer: {
-    width: 60,
-    height: 80,
+  img: {
+    borderWidth: 0.5,
+    borderColor: '#ffffff',
   },
 });
 
