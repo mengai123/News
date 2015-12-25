@@ -33,7 +33,7 @@ var TabBar = React.createClass({
 
                 <TabBarItemIOS
                     name = {Image_Hot_Tag_Name}
-                    title = '热门'
+                    title = '美图'
                     icon = {require('image!hot')}
                     accessibilityLabel = "Blue Tab"
                     selected = {this.state.selectedTab === Image_Hot_Tag_Name}
@@ -53,8 +53,8 @@ var TabBar = React.createClass({
 
                 <TabBarItemIOS
                     name = {Image_New_Tag_Name}
-                    title = '最新'
-                    icon = {require('image!new')}
+                    title = '机器人'
+                    icon = {require('image!robot')}
                     accessibilityLabel = "Red Tab"
                     selected = {this.state.selectedTab === Image_New_Tag_Name}
                     onPress = {() => {
