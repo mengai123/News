@@ -3,6 +3,8 @@
 var React = require('react-native');
 var Lodash = require('lodash');
 
+var LargeImage = require('./LargeImage');
+
 var {
   StyleSheet,
   View,
@@ -39,8 +41,7 @@ var ShowImageDetail = React.createClass({
       return (
         <ScrollView
           contentContainerStyle = {styles.scrollViewContent}
-          style = {styles.scrollViewContainer}
-          >
+          style = {styles.scrollViewContainer} >
             {this.renderImagesRow(this.state.images)}
         </ScrollView>
       );
@@ -52,14 +53,24 @@ var ShowImageDetail = React.createClass({
   },
 
   renderImagesRow: function (images) {
-    return images.map((img) => {
+    return images.map((img,index) => {
         return(
-          <Image
-            style = {[this.calculateImageSize(), styles.img]}
-            source = {{uri: 'http://tnfs.tngou.net/image' + img.src}}
-            defaultSource = {require('image!placeholder')} />
+          <TouchableOpacity onPress = {() => this.pressImage(img)}>
+            <Image
+              style = {[this.calculateImageSize(), styles.img]}
+              source = {{uri: 'http://tnfs.tngou.net/image' + img.src}}
+              defaultSource = {require('image!placeholder')} />
+          </TouchableOpacity>
         );
       });
+  },
+
+  pressImage: function (img) {
+    this.props.navigator.push({
+      //title: image.title,
+      passProps: {img : img},
+      component: LargeImage,
+    });
   },
 
   calculateImageSize: function () {
