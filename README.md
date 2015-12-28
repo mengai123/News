@@ -15,3 +15,12 @@
 
 
 PS：使用的 API 是在 [百度 APIStore](http://apistore.baidu.com/) 提供的。[API 详情](http://apistore.baidu.com/apiworks/servicedetail/992.html)
+
+**TODO:**
+
+1. 下拉刷新
+2. 上拉加载更多
+3. 保存图片到本地
+3. 修改大图查看方式
+4. 大图模式左右滑动查看
+5. 机器人聊天界面
