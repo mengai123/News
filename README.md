@@ -24,3 +24,9 @@ PS：使用的 API 是在 [百度 APIStore](http://apistore.baidu.com/) 提供�
 3. 修改大图查看方式
 4. 大图模式左右滑动查看
 5. 机器人聊天界面
+
+**截图**
+![](http://7xp0zg.com1.z0.glb.clouddn.com/15-12-29/99705187.jpg)
+![分类列表](http://7xp0zg.com1.z0.glb.clouddn.com/15-12-29/28799873.jpg)
+![列表页](http://7xp0zg.com1.z0.glb.clouddn.com/15-12-29/35316442.jpg)
+![图片列表](http://7xp0zg.com1.z0.glb.clouddn.com/15-12-29/5357098.jpg)
